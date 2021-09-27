@@ -1,0 +1,29 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Ayusocoin
+    network: mainnet
+    source:
+      address: "0xa745005a2764cCbFEB1a8c6fCa178F896aF5d777"
+      abi: Ayusocoin
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - SetRootAttempt
+        - Transfer
+      abis:
+        - name: Ayusocoin
+          file: ./abis/Ayusocoin.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: SetRootAttempt(address,address,address,address)
+          handler: handleSetRootAttempt
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts

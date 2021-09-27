@@ -1,0 +1,6 @@
+type Account @entity {
+  id: ID!
+  balance: BigInt!
+  capped: Boolean!
+  isRoot: Boolean!
+}

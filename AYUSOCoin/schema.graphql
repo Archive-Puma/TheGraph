@@ -1,6 +1,35 @@
+"""
+Base Account type
+"""
 type Account @entity {
+  "Account address"
   id: ID!
+  "Account balance"
   balance: BigInt!
-  capped: Boolean!
+  "Contract owner"
   isRoot: Boolean!
+  "List of transfers for which the account is the sender"
+  transfersFrom: [Transfer!]! @derivedFrom(field: "from")
+  "List of transfers for which the account is the receiver"
+  transfersTo: [Transfer!]! @derivedFrom(field: "to")
+}
+
+"""
+Describes a Transfer transaction
+"""
+type Transfer @entity {
+  "Transaction hash"
+  id: ID!
+  "Sender account"
+  from: Account!
+  "Receiver account"
+  to: Account!
+  "Number of tokens"
+  amount: BigInt!
+  "Timestamp"
+  timestamp: BigInt!
+  "Gas used"
+  gasUsed: BigInt!
+  "Gas limit"
+  gasLimit: BigInt!
 }

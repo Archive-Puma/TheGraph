@@ -1,17 +1,53 @@
 """
-Base Account type
+Describes the token
+"""
+type Token @entity {
+  "Contract address"
+  id: ID!
+  "Token name"
+  name: String!
+  "Token symbol"
+  symbol: String!
+  "Total amount of tokens issued"
+  totalSupply: BigInt!
+  "Contract owner"
+  owner: Account!
+  "Total amount of holders"
+  holders: [Account!]!
+}
+
+"""
+Describes an Account
 """
 type Account @entity {
   "Account address"
   id: ID!
   "Account balance"
   balance: BigInt!
-  "Contract owner"
-  isRoot: Boolean!
+  "Account type"
+  type: String!
   "List of transfers for which the account is the sender"
   transfersFrom: [Transfer!]! @derivedFrom(field: "from")
   "List of transfers for which the account is the receiver"
   transfersTo: [Transfer!]! @derivedFrom(field: "to")
+  "List of allowances for which the account is the owner"
+  allowedFrom: [Allowance!]! @derivedFrom(field: "owner")
+  "List of allowances for which the account is the spender"
+  allowedTo: [Allowance!]! @derivedFrom(field: "spender")
+}
+
+"""
+Describes an Allowance between two Accounts
+"""
+type Allowance @entity {
+  "Owner address - Spender address"
+  id: ID!
+  "Owner of balance"
+  owner: Account!
+  "Allowance owner"
+  spender: Account!
+  "Amount of remain tokens"
+  balance: BigInt!
 }
 
 """
@@ -24,8 +60,12 @@ type Transfer @entity {
   from: Account!
   "Receiver account"
   to: Account!
+  "The account who made the transaction"
+  caller: Account!
   "Number of tokens"
   amount: BigInt!
+  "Block number"
+  block: BigInt!
   "Timestamp"
   timestamp: BigInt!
   "Gas used"
@@ -33,3 +73,4 @@ type Transfer @entity {
   "Gas limit"
   gasLimit: BigInt!
 }
+
